@@ -600,3 +600,57 @@ A full-stack café ordering application demonstrating frontend development, REST
 
 The application has been tested from the frontend through the backend API to MongoDB, confirming that customer orders can be placed and retrieved successfully.
 
+# ☕ The Coffee Corner
+
+> A full-stack café ordering web application built with React.js, Vite, Node.js, Express.js, and MongoDB. Customers can browse the café menu, search for items, manage quantities, enter their details, and place orders that are stored in MongoDB.
+
+---
+
+## 📷 Project Screenshots
+
+### 🏠 Home Page
+
+![The Coffee Corner Home Page](<screenshots/Home.pge.png>)
+
+### ☕ Menu Page
+
+![The Coffee Corner Menu](<screenshots/Menu.pge.png>)
+
+### 🛒 Cart Page
+
+![Shopping Cart](<screenshots/Cart.pge.png>)
+
+### 👤 Customer Details
+
+![Customer Details](<screenshots/Customer details.pge.png>)
+
+### 👤 Customer Information
+
+![Customer Information](<screenshots/Customer.png>)
+
+### 🧾 Order Summary
+
+![Order Summary](<screenshots/order summary.png.png>)
+
+---
+
+## 📖 Executive Overview
+
+**The Coffee Corner** is a full-stack café ordering application designed to simplify the process of placing and storing customer orders.
+
+The application uses a modern **React.js frontend** connected to a **Node.js and Express.js backend**. Customer orders are sent through REST APIs and stored in **MongoDB**.
+
+The project demonstrates a complete full-stack workflow:
+
+```text
+Customer
+   ↓
+React.js Frontend
+   ↓
+Express.js REST API
+   ↓
+Node.js Backend
+   ↓
+MongoDB
+   ↓
+Order Stored Successfully
