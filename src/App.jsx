@@ -137,8 +137,7 @@ function App() {
 
   // TOTAL PRICE
   const total = menuItems.reduce(
-    (sum, item) =>
-      sum + item.price * (cart[item.id] || 0),
+    (sum, item) => sum + item.price * (cart[item.id] || 0),
     0
   );
 
@@ -161,8 +160,8 @@ function App() {
     });
   };
 
-  // CONFIRM ORDER
-  const confirmOrder = (e) => {
+  // CONFIRM ORDER + SAVE TO MONGODB
+  const confirmOrder = async (e) => {
     e.preventDefault();
 
     if (!customer.name || !customer.phone || !customer.table) {
@@ -173,21 +172,59 @@ function App() {
     const itemsOrdered = menuItems
       .filter((item) => cart[item.id])
       .map((item) => ({
-        ...item,
+        name: item.name,
         quantity: cart[item.id],
+        price: item.price,
       }));
 
-    setOrderedItems(itemsOrdered);
-    setOrderedTotal(total);
+    const orderData = {
+      customerName: customer.name,
+      phone: customer.phone,
+      tableNumber: Number(customer.table),
+      items: itemsOrdered,
+      total: total,
+    };
 
-    setShowCheckout(false);
-    setOrderPlaced(true);
-    setCart({});
+    try {
+      const response = await fetch("http://localhost:5000/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to place order");
+      }
+
+      console.log("Order saved successfully:", data);
+
+      setOrderedItems(
+        menuItems
+          .filter((item) => cart[item.id])
+          .map((item) => ({
+            ...item,
+            quantity: cart[item.id],
+          }))
+      );
+
+      setOrderedTotal(total);
+
+      setShowCheckout(false);
+      setOrderPlaced(true);
+      setCart({});
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } catch (error) {
+      console.error("Order error:", error);
+      alert("Failed to place order. Please try again.");
+    }
   };
 
   // START NEW ORDER
@@ -219,7 +256,6 @@ function App() {
       {/* ================= HEADER ================= */}
 
       <header className="header">
-
         <div>
           <h1>☕ The Coffee Corner</h1>
 
@@ -231,14 +267,12 @@ function App() {
         <div className="cart">
           🛒 Cart: {totalItems}
         </div>
-
       </header>
 
       {/* ================= HERO ================= */}
 
       {!orderPlaced && (
         <section className="hero">
-
           <div className="hero-content">
 
             <h2>
@@ -264,7 +298,6 @@ function App() {
             </button>
 
           </div>
-
         </section>
       )}
 
@@ -287,7 +320,6 @@ function App() {
           {/* SEARCH */}
 
           <div className="search-box">
-
             <input
               type="text"
               placeholder="🔍 Search for coffee, tea, cake..."
@@ -296,7 +328,6 @@ function App() {
                 setSearch(e.target.value)
               }
             />
-
           </div>
 
           {/* CATEGORIES */}
